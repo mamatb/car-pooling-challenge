@@ -1,4 +1,16 @@
-# Car Pooling Service Challenge
+* [Car Pooling Service Challenge](#challenge)
+    * [Evaluation rules](#challenge_evaluation)
+    * [API](#challenge_api)
+    * [Tooling](#challenge_tooling)
+    * [Requirements](#challenge_requirements)
+    * [Feedback](#challenge_feedback)
+* [Car Pooling Service Challenge Solution](#solution)
+    * [Why Go and Gin](#solution_why)
+    * [Data Structures and Algorithms](#solution_dsa)
+    * [Car allocation strategy](#solution_strategy)
+    * [Assumptions](#solution_assumptions)
+
+# Car Pooling Service Challenge <a name="challenge" />
 
 Design/implement a system to manage car pooling.
 
@@ -33,7 +45,7 @@ a car for 6; if a group of 2 requests a car you may take them in the car.
 This may mean that the group of 6 waits a long time,
 possibly until they become frustrated and leave.
 
-## Evaluation rules
+## Evaluation rules <a name="challenge_evaluation" />
 
 This challenge has a partially automated scoring system. This means that before
 it is seen by the evaluators, it needs to pass a series of automated checks
@@ -58,7 +70,7 @@ There is a number of scoring systems being run on your solution after it is
 submitted. It is ok if these do not pass, but they add information for the
 reviewers.
 
-## API
+## API <a name="challenge_api" />
 
 To simplify the challenge and remove language restrictions, this service must
 provide a REST API which will be used to interact with it.
@@ -168,7 +180,7 @@ Responses:
 * **400 Bad Request** When there is a failure in the request format or the
   payload can't be unmarshalled.
 
-## Tooling
+## Tooling <a name="challenge_tooling" />
 
 At REDACTED, we use Gitlab and Gitlab CI for our backend development work. 
 In this repo you may find a [.gitlab-ci.yml](./.gitlab-ci.yml) file which
@@ -197,7 +209,7 @@ You can ignore the Gitlab warning "REDACTED Challenge has exceeded its pipeline
 minutes quota," it will not affect your test or the ability to run pipelines on
 Gitlab.
 
-## Requirements
+## Requirements <a name="challenge_requirements" />
 
 - The service should be as efficient as possible.
   It should be able to work reasonably well with at least $`10^4`$ / $`10^5`$ cars / waiting groups.
@@ -208,7 +220,7 @@ Gitlab.
   the same way you would be generating documentation for any other deliverable.
   We want to see how you operate in a quasi real work environment.
 
-## Feedback
+## Feedback <a name="challenge_feedback" />
 
 In REDACTED, we really appreciate your interest and your time. We are highly 
 interested on improving our Challenge and the way we evaluate our candidates. 
@@ -219,13 +231,13 @@ following survey:
 
 Your participation is really important. Thanks for your contribution!
 
-# Car Pooling Service Challenge Solution
+# Car Pooling Service Challenge Solution <a name="solution" />
 
-## Why Go and Gin
+## Why Go and Gin <a name="solution_why" />
 
 Go and Gin are easy to write, easy to read and performant. Being based on the `net/http` standard package, Gin serves each request by an individual goroutine, and also provides JSON validation, error management, middleware support, etc. See [gin-gonic.com](https://gin-gonic.com/) for more details.
 
-## Data Structures and Algorithms
+## Data Structures and Algorithms <a name="solution_dsa" />
 
 As the objective of the Car Pooling Service is to take full advantage of the seats in each car, cars are organized by available seats and groups are organized by number of people. Both have a map containing all elements to be able to read/write/delete them in amortized O(1) time, but the seats-based and people-based data structures differ.
 
@@ -233,10 +245,10 @@ Cars are organized by available seats making use of a maps slice, again in terms
 
 Groups are organized by number of people making use of a slices slice, used as queues to honor arrival order when possible. Again index `i` is in charge of storing all groups waiting with `i+1` people.
 
-## Car allocation strategy
+## Car allocation strategy <a name="solution_strategy" />
 
 Ideally each group is served during the journey request, storing it for later in case there are no cars with enough available seats. Each time a car drops a traveling group, it looks for fitting groups waiting for a journey, meaning that groups are served as soon as possible (again honoring arrival order).
 
-## Assumptions
+## Assumptions <a name="solution_assumptions" />
 
 Based on the examples provided, car and group ids are assumed to be unique and sequential, starting from 1 onwards. Internally, id 0 has been used to represent a null car/group.
